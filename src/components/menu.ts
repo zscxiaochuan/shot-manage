@@ -8,6 +8,12 @@ export const menuData: Menus[] = [
         icon: 'Monitor',
     },
     {
+        id: 'order',
+        title: '订单管理',
+        index: '/order-manager',
+        icon: 'Memo',
+    },
+    {
         id: 'info',
         title: '基础信息管理',
         index: '/information-manager',

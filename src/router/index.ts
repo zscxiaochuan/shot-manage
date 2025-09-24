@@ -24,6 +24,15 @@ const routes: RouteRecordRaw[] = [
                 component: () => import(/* webpackChunkName: "activity-manager" */ '../views/activity-manager/index.vue'),
             },
             {
+                path: '/order-manager',
+                name: 'order-manager',
+                meta: {
+                    title: '订单管理',
+                    noAuth: true,
+                },
+                component: () => import(/* webpackChunkName: "order-manager" */ '../views/order-manager/index.vue'),
+            },
+            {
                 path: '/information-manager',
                 name: 'information-manager',
                 meta: {

@@ -60,6 +60,7 @@ const exportXlsx = () => {
         arr.push(...[item.name, item.sno, item.class, item.age, item.sex]);
         list.push(arr);
     });
+    console.log(list);
     let WorkSheet = XLSX.utils.aoa_to_sheet(list);
     let new_workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(new_workbook, WorkSheet, '第一页');

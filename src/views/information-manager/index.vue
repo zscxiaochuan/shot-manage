@@ -1,6 +1,6 @@
 <template>
     <div>
-        <TableSearch :query="query" :options="searchOpt" :search="handleSearch" />
+        <TableSearch :btn-permission="['export']" :query="query" :options="searchOpt" :search="handleSearch" :export="exportFunc" />
         <div class="container">
             <TableCustom
                 :current-page="page.index"
@@ -13,8 +13,12 @@
                 :changePage="changePage"
                 :editFunc="handleEdit"
             >
-                <template #toolbarBtn>
-                    <el-button type="warning" :icon="CirclePlusFilled" @click="visible = true">新增</el-button>
+                <template #status="{ rows }">
+                    <el-switch
+                        v-model="rows.status"
+                        class="ml-2"
+                        style="--el-switch-on-color: #13ce66;"
+                    />
                 </template>
             </TableCustom>
         </div>
@@ -37,27 +41,21 @@
 <script setup lang="ts" name="system-user">
 import { ref, reactive } from 'vue';
 import { ElMessage } from 'element-plus';
-import { CirclePlusFilled } from '@element-plus/icons-vue';
 import { User } from '@/types/user';
 import { fetchUserData } from '@/api';
 import TableCustom from '@/components/table-custom.vue';
 import TableDetail from '@/components/table-detail.vue';
 import TableSearch from '@/components/table-search.vue';
 import { FormOption, FormOptionList } from '@/types/form-option';
+import { exportXlsx } from '@/utils/export';
 
 // 查询相关
 const query = reactive({
     name: '',
 });
 const searchOpt = ref<FormOptionList[]>([
-    { type: 'input', prop: 'name', placeholder: '请输入活动名称' },
-    {
-        type: 'select',
-        prop: 'status',
-        placeholder: '请选择活动状态',
-        opts: [{ label: '进行中', value: 1 }, { label: '已结束', value: 2 }],
-    },
-    { type: 'datetimerange', prop: 'date', startPlaceholder: '开始时间', endPlaceholder: '结束时间' },
+    { type: 'input', prop: 'name', placeholder: '请输入玩家名称' },
+    { type: 'input', prop: 'mobile', placeholder: '请输入玩家手机号' },
 ]);
 const handleSearch = () => {
     changePage(1);
@@ -66,10 +64,12 @@ const handleSearch = () => {
 // 表格相关
 let columns = ref([
     { type: 'index', label: '序号', width: 55, align: 'center' },
-    { prop: 'name', label: '用户名' },
+    { prop: 'name', label: '玩家名称' },
+    { prop: 'age', label: '年龄' },
+    { prop: 'sex', label: '性别' },
     { prop: 'phone', label: '手机号' },
-    { prop: 'role', label: '角色' },
-    { prop: 'operator', label: '操作', width: 250 },
+    { prop: 'date', label: '注册日期' },
+    { prop: 'status', label: '账号状态', width: 250, _map: {'true': '启用', 'false': '禁用'} },
 ]);
 const page = reactive({
     index: 1,
@@ -163,6 +163,13 @@ const handleView = (row: User) => {
 // 删除相关
 const handleDelete = (row: User) => {
     ElMessage.success('删除成功');
+};
+const exportFunc = () => {
+    exportXlsx({
+        columns: columns.value,
+        fileName: '玩家列表',
+        data: tableData.value,
+    });
 };
 </script>
 

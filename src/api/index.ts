@@ -13,6 +13,12 @@ export const fetchUserData = () => {
         method: 'get'
     });
 };
+export const fetchOrderData = () => {
+    return request({
+        url: './mock/order.json',
+        method: 'get'
+    });
+};
 
 export const fetchRoleData = () => {
     return request({
